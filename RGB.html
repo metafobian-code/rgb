@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RGB</title>
+<style>
+  :root { color-scheme: dark; box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+  html, body { margin: 0; background: #000; color: #fff; min-height: 100%; }
+  body { font-family: Georgia, "Times New Roman", serif; }
+  .wrap { display: grid; grid-template-columns: 1fr minmax(180px, 32%); gap: 4vw; align-items: center; min-height: 100vh; padding: 6vh 5vw; box-sizing: border-box; }
+  .poem { max-width: 38rem; }
+  h1 { font-size: clamp(1.6rem, 5vw, 2.8rem); letter-spacing: .15em; margin: 0 0 1.5rem; opacity: 0; animation: in .6s forwards; }
+  .line { font-size: clamp(.85rem, 1.9vw, 1.2rem); line-height: 1.6; min-height: 1.6em; opacity: 0; transform: translateY(8px); transition: opacity .5s, transform .5s; }
+  .line.show { opacity: 1; transform: none; }
+  .line.gap { min-height: 1.2em; }
+  .side { display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+  .box { width: 100%; aspect-ratio: 1; max-width: 280px; animation: rgb 3s steps(1, end) infinite; }
+  .label { font-size: clamp(1rem, 2.2vw, 1.4rem); letter-spacing: .2em; text-transform: uppercase; }
+  @keyframes rgb {
+    0%   { background: #f00; box-shadow: 0 0 60px #f00; }
+    33%  { background: #0f0; box-shadow: 0 0 60px #0f0; }
+    66%  { background: #00f; box-shadow: 0 0 60px #00f; }
+  }
+  @keyframes in { to { opacity: 1; } }
+  @media (max-width: 640px) {
+    .wrap { grid-template-columns: 1fr; }
+    .side { order: -1; }
+    .box { max-width: 160px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .box { animation-duration: 6s; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="poem" id="poem"></div>
+  <div class="side">
+    <div class="box" aria-hidden="true"></div>
+    <div class="label">Aurora boreal</div>
+  </div>
+</div>
+<script>
+  var lines = [
+    "Soy tan RGB que la noche me confunde con un cartel de motel",
+    "y el amanecer con su rival;",
+    "pero es pura ansiedad.",
+    "",
+    "Me preguntan: ¿paisaje o publicidad?",
+    "Y no sé,",
+    "a veces soy la montaña,",
+    "a veces solo el letrero",
+    "que promete descuentos en el corazón.",
+    "",
+    "Pero tranquilos:",
+    "aunque me prendan,",
+    "aunque me hagan parpadear,",
+    "nunca me encienden por error.",
+    "",
+    "Y tú no eres neón, hermano:",
+    "eres aurora boreal."
+  ];
+  var poem = document.getElementById("poem");
+  var timers = [];
+  function run() {
+    timers.forEach(clearTimeout); timers = [];
+    poem.innerHTML = "<h1>RGB</h1>";
+    var t = 400;
+    lines.forEach(function (txt) {
+      var d = document.createElement("div");
+      d.className = "line" + (txt ? "" : " gap");
+      d.textContent = txt;
+      poem.appendChild(d);
+      t += txt ? 550 : 250;
+      timers.push(setTimeout(function () { d.classList.add("show"); }, t));
+    });
+  }
+  run();
+</script>
+</body>
+</html>
